@@ -227,7 +227,7 @@ public class SAINBotSuppressClass : BotComponentClassBase
             return 0f;
         }
         currentAmmoCount = weaponManager.Reload.BulletCount;
-        return (float)currentAmmoCount / weaponManager.Reload.MaxBulletCount;
+        return (float) currentAmmoCount / weaponManager.Reload.MaxBulletCount;
     }
 
     public float TimeSinceSeenToSuppress
@@ -237,7 +237,7 @@ public class SAINBotSuppressClass : BotComponentClassBase
 
     public float TimeSinceShotAtToSuppress
     {
-        get { return Bot.Info.PersonalitySettings.General.TimeSinceShotToSuppress; }
+        get { return Bot.Info.PersonalitySettings.General.TimeSinceShotAtToSuppress; }
     }
 
     public float TimeSinceShotToSuppress
