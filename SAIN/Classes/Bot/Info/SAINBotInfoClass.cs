@@ -139,12 +139,9 @@ public class SAINBotInfoClass : BotComponentClassBase
         }
 
         TimeBeforeSearch = searchTime;
-        float random = 30f.Randomize(0.75f, 1.25f).Round100();
+        // Get a random time between 20s and 60s
+        float random = 20f.Randomize(1f, 3f).Round100();
         float forgetTime = searchTime + random;
-        if (forgetTime < 240f)
-        {
-            forgetTime = 240f.Randomize(0.9f, 1.1f).Round100();
-        }
 
         BotOwner.Settings.FileSettings.Mind.TIME_TO_FORGOR_ABOUT_ENEMY_SEC = forgetTime;
         ForgetEnemyTime = forgetTime;
