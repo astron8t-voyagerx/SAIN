@@ -7,6 +7,7 @@ using SAIN.Helpers;
 using SAIN.Patches.Components;
 using SAIN.Patches.Event;
 using SAIN.Patches.Hearing;
+using SAIN.Patches.Vision;
 using SAIN.Plugin;
 using SAIN.Preset;
 using SAIN.Preset.GlobalSettings;
@@ -185,6 +186,7 @@ public class SAINPlugin : BaseUnityPlugin
                 new Patches.Vision.BotLightTurnOnPatch(),
                 new Patches.Vision.VisionSpeedPatch(),
                 new Patches.Vision.WeatherVisionPatch(),
+                new IsPointInVisibleSectorCallerPatch(),
                 new Patches.Vision.IsPointInVisibleSectorPatch(),
                 new Patches.Vision.VisionDistancePatch(),
                 new Patches.Vision.CheckFlashlightPatch(),

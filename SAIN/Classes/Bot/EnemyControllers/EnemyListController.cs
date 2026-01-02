@@ -436,9 +436,7 @@ public class EnemyListController : BotSubClass<SAINEnemyController>, IBotClass
 
     private static bool validateComponents(IPlayer person)
     {
-        return person != null
-            && person.IsAI
-            && person.AIData.BotOwner.GetPlayer == null;
+        return person != null && person.IsAI && person.AIData.BotOwner.GetPlayer == null;
     }
 
     private float _nextCompareListsTime;
