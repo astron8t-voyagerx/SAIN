@@ -112,9 +112,9 @@ internal static class SAINDifficultyClass
 
         var global = preset.GlobalSettings;
         global.Shoot.BOT_RECOIL_COEF = 3f;
-        global.Difficulty.ScatteringCoef = 3f;
+        global.Difficulty.ScatteringCoef = 2f;
         global.Difficulty.PRECISION_SPEED_COEF = 0.33f;
-        global.Difficulty.ACCURACY_SPEED_COEF = 3f;
+        global.Difficulty.ACCURACY_SPEED_COEF = 2f;
         global.Difficulty.HearingDistanceCoef = 0.4f;
         global.Aiming.FasterCQBReactionsGlobal = false;
         global.Difficulty.VisibleDistCoef = 0.5f;
@@ -204,9 +204,9 @@ internal static class SAINDifficultyClass
 
         var global = preset.GlobalSettings;
         global.Shoot.BOT_RECOIL_COEF = 1.6f;
-        global.Difficulty.ScatteringCoef = 1.25f;
+        global.Difficulty.ScatteringCoef = 1f;
         global.Difficulty.PRECISION_SPEED_COEF = 0.75f;
-        global.Difficulty.ACCURACY_SPEED_COEF = 1.25f;
+        global.Difficulty.ACCURACY_SPEED_COEF = 1f;
         global.Difficulty.VisibleDistCoef = 0.75f;
         global.Difficulty.GainSightCoef = 0.75f;
         global.Difficulty.HearingDistanceCoef = 0.66f;
@@ -295,6 +295,10 @@ internal static class SAINDifficultyClass
     private static SAINPresetClass CreateBasePreset(SAINDifficulty difficulty)
     {
         var preset = new SAINPresetClass(difficulty);
+
+        preset.GlobalSettings.Difficulty.ScatteringCoef = 0.75f;
+        preset.GlobalSettings.Difficulty.ACCURACY_SPEED_COEF = 0.8f;
+
         foreach (var botsetting in preset.BotSettings.SAINSettings)
         {
             var settings = botsetting.Value.Settings;
@@ -638,9 +642,9 @@ internal static class SAINDifficultyClass
                     //diff.Core.ScatteringPerMeter = 0.03f;
                     //diff.Core.ScatteringClosePerMeter = 0.080f;
                     diff.Mind.WeaponProficiency = 0.75f;
-                    diff.Difficulty.ScatteringCoef = 0.66f;
+                    diff.Difficulty.ScatteringCoef = 0.6f;
                     diff.Difficulty.PRECISION_SPEED_COEF = 1.33f;
-                    diff.Difficulty.ACCURACY_SPEED_COEF = 0.66f;
+                    diff.Difficulty.ACCURACY_SPEED_COEF = 0.6f;
                     diff.Difficulty.GainSightCoef = 1.25f;
                     diff.Difficulty.VisibleDistCoef = 1.25f;
                     diff.Difficulty.AggressionCoef = 1.2f;
@@ -692,12 +696,12 @@ internal static class SAINDifficultyClass
 
         var global = preset.GlobalSettings;
         global.Shoot.BOT_RECOIL_COEF = 0.75f;
-        global.Difficulty.ScatteringCoef = 0.75f;
+        global.Difficulty.ScatteringCoef = 0.55f;
         global.Aiming.AimCenterMassGlobal = false;
         global.Difficulty.VisibleDistCoef = 1.25f;
         global.Difficulty.GainSightCoef = 1.25f;
         global.Difficulty.PRECISION_SPEED_COEF = 1.25f;
-        global.Difficulty.ACCURACY_SPEED_COEF = 0.75f;
+        global.Difficulty.ACCURACY_SPEED_COEF = 0.6f;
 
         ApplyHarderPMCs(preset);
 
