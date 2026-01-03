@@ -106,7 +106,6 @@ public class GameWorldComponent : MonoBehaviour
         }
     }
 
-    public ColliderCoverManager CoverManager { get; private set; }
     public static GameWorldComponent Instance { get; private set; }
     public GameWorld GameWorld { get; private set; }
     public PlayerSpawnTracker PlayerTracker { get; private set; }
@@ -294,7 +293,6 @@ public class GameWorldComponent : MonoBehaviour
         }
 
         SAINBotController = sainBotController;
-        CoverManager = gameWorld.GetOrAddComponent<ColliderCoverManager>();
         PlayerTracker = new PlayerSpawnTracker(this);
         Doors = new DoorHandler(this);
         Location = new LocationClass(this);

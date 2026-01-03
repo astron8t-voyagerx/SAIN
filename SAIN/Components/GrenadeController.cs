@@ -57,7 +57,8 @@ public class GrenadeController(BotManagerComponent controller) : BotManagerBase(
         {
             return;
         }
-        Player player = GameWorldInfo.GetAlivePlayer(playerProfileID);
+
+        Player player = GameWorld.GetAlivePlayerByProfileID(playerProfileID);
         if (player != null)
         {
             if (!isSmoke)
@@ -128,7 +129,7 @@ public class GrenadeController(BotManagerComponent controller) : BotManagerBase(
             return;
         }
 
-        Player player = GameWorldInfo.GetAlivePlayer(grenade.ProfileId);
+        Player player = GameWorld.GetAlivePlayerByProfileID(grenade.ProfileId);
         if (player == null)
         {
             Logger.LogError($"Player Null from ID {grenade.ProfileId}");

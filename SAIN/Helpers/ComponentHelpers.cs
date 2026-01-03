@@ -95,11 +95,6 @@ internal class ComponentHelpers
 #endif
     }
 
-    public static void ClearCache()
-    {
-        ListHelpers.ClearCache(DisposeMethods);
-    }
-
     private static readonly Dictionary<Type, MethodInfo> DisposeMethods = new();
 
     public static T GetOrAddComponent<T, K>(K original)

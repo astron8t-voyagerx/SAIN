@@ -8,11 +8,6 @@ namespace SAIN.Editor.GUISections;
 
 public static class BotPersonalityEditor
 {
-    public static void ClearCache()
-    {
-        ListHelpers.ClearCache(OpenPersMenus);
-    }
-
     public static void PersonalityMenu()
     {
         string toolTip =
