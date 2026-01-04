@@ -37,5 +37,5 @@ public static class AssemblyInfoClass
     public const string FikaHeadlessGUID = "com.fika.headless";
 
     public const string BigBrainGUID = "xyz.drakia.bigbrain";
-    public const string BigBrainVersion = "1.0.0";
+    public const string BigBrainVersion = "1.4.0";
 }
