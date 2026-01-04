@@ -302,13 +302,11 @@ public class PlayerComponent : MonoBehaviour, IDisposable, ISPlayer
 
     public bool Init(IPlayer iPlayer)
     {
-        ProfileId = iPlayer.ProfileId;
-
         try
         {
-            PlayerData playerData = new(this, iPlayer as Player, iPlayer);
-            Player = playerData.Player;
-            Name = playerData.Player.name;
+            ProfileId = iPlayer.ProfileId;
+            Player = iPlayer as Player;
+            Name = Player.name;
 
             ActivationClass = new PersonActiveClass(this);
 
