@@ -522,15 +522,21 @@ public class EnemyDecisionClass : BotBase
                 return true;
             }
         }
-        // Low Threat 적(Scav) 상대 시 - 무조건 서서 정조준 (시간 제한 없음)
-        if (enemy.ThreatLevel == EEnemyThreatLevel.Low)
-        {
-            reason = "lowThreatStandAndAim";
-            return true;
-        }
-
         bool searchingForEnemy = enemy.Events.OnSearch.Value;
         float holdGroundInterval = Bot.Info.HoldGroundDelay;
+
+        // Low Threat 적(Scav) 상대 시 - 5초 동안 서서 정조준
+        if (enemy.ThreatLevel == EEnemyThreatLevel.Low)
+        {
+            float lowThreatVisibleTime = Time.time - enemy.Vision.VisibleStartTime;
+            if (lowThreatVisibleTime < 5f)
+            {
+                reason = "lowThreatStandAndAim";
+                return true;
+            }
+            // 5초 이후에는 일반 로직으로 전환
+            holdGroundInterval = 5f;
+        }
 
         if (searchingForEnemy)
         {

@@ -77,7 +77,7 @@ public static class EnemyGainSightClass
     private const float PERIPHERAL_VISION_SPEED_CLOSE_FRONT_MOD = 0.8f;
     private const float PERIPHERAL_VISION_SPEED_ENEMY_CLOSE_DIST = 10;
     private const float PERIPHERAL_VISION_SPEED_ENEMY_CLOSE_MOD = 0.9f;
-    private const float PERIPHERAL_VISION_SPEED_ENEMY_VERYCLOSE_DIST = 5;
+    private const float PERIPHERAL_VISION_SPEED_ENEMY_VERYCLOSE_DIST = 10;
     private const float PERIPHERAL_VISION_SPEED_ENEMY_VERYCLOSE_MOD = 0.8f;
 
     private static float PRONE_VISION_SPEED_COEF

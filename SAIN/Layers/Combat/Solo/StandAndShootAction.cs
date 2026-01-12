@@ -1,4 +1,4 @@
-﻿using DrakiaXYZ.BigBrain.Brains;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
 using SAIN.Helpers;
 using SAIN.Models.PlayerData;
@@ -49,7 +49,16 @@ public class StandAndShootAction(BotOwner bot) : BotAction(bot, nameof(StandAndS
     private static bool FindSwingMovePosition(PlayerNavData navData, Enemy enemy, out Vector3 movePosition)
     {
         movePosition = Vector3.zero;
-        if (enemy != null && navData.IsOnNavMesh && enemy.RealDistance < 50)
+        if (enemy == null || !navData.IsOnNavMesh)
+        {
+            return false;
+        }
+
+        // Low Threat(Scav) 상대 시: 10m 이내에서만 움직이며 사격
+        // 그 외: 25m 이내에서 움직이며 사격
+        float moveShootMaxDist = enemy.ThreatLevel == EEnemyThreatLevel.Low ? 10f : 25f;
+
+        if (enemy.RealDistance < moveShootMaxDist)
         {
             float angle = UnityEngine.Random.Range(70, 110);
             if (EFTMath.RandomBool())

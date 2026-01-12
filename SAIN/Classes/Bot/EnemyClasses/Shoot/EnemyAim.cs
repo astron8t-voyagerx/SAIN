@@ -12,9 +12,9 @@ public class EnemyAim : EnemyBase
     private const float CALC_SCATTER_FREQ_AI = 0.1f;
 
     /// <summary>
-    /// Low Threat 적(Scav) 상대 시 Scatter 감소 배율 (4배 = Scatter 1/4로 줄임, 매우 정확)
+    /// Low Threat 적(Scav) 상대 시 Scatter 감소 배율 (8배 = Scatter 1/8로 줄임, 극도로 정확)
     /// </summary>
-    private const float LOW_THREAT_SCATTER_REDUCTION = 4f;
+    private const float LOW_THREAT_SCATTER_REDUCTION = 8f;
 
     public EnemyAim(EnemyData enemyData)
         : base(enemyData, enemyData.Enemy.Bot) { }

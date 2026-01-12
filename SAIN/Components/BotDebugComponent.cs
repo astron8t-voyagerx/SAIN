@@ -116,12 +116,8 @@ public class BotDebugComponent : MonoBehaviour
                 continue;
             }
 
-            // 거리 제한 (100m 이내만 표시)
+            // 거리 계산 (거리 제한 없음)
             float distance = Vector3.Distance(mainPlayer.Position, data.Bot.Position);
-            if (distance > 100f)
-            {
-                continue;
-            }
 
             DrawBotOverlay(data.Bot, data.Text, distance);
         }
