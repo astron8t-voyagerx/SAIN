@@ -1,4 +1,4 @@
-﻿using EFT;
+using EFT;
 using EFT.InventoryLogic;
 using SAIN.Components;
 using SAIN.Preset.GlobalSettings;

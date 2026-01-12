@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using EFT;
 using SAIN.Classes;
 using SAIN.Components;
@@ -11,6 +11,17 @@ using SAIN.Types.PlayerSmoothing;
 using UnityEngine;
 
 namespace SAIN.SAINComponent.Classes.EnemyClasses;
+
+/// <summary>
+/// 적의 위협 수준을 나타냅니다.
+/// Low: Scav 등 약한 AI → 신중하게 헤드샷
+/// High: PMC, Player, Boss 등 강한 적 → 기존 공격적 대응
+/// </summary>
+public enum EEnemyThreatLevel
+{
+    Low,
+    High
+}
 
 public class Enemy : BotBase, ISPlayer
 {
@@ -142,6 +153,49 @@ public class Enemy : BotBase, ISPlayer
     public bool IsZombie
     {
         get { return EnemyPlayer.UsedSimplifiedSkeleton; }
+    }
+
+    /// <summary>
+    /// 적의 위협 수준. Scav는 Low, 나머지는 High.
+    /// Low 위협 적에게는 신중하게 헤드샷으로 처리.
+    /// </summary>
+    public EEnemyThreatLevel ThreatLevel
+    {
+        get
+        {
+            if (_threatLevelCached == null)
+            {
+                _threatLevelCached = CalcThreatLevel();
+            }
+            return _threatLevelCached.Value;
+        }
+    }
+    private EEnemyThreatLevel? _threatLevelCached;
+
+    private EEnemyThreatLevel CalcThreatLevel()
+    {
+        // 플레이어(Human)는 항상 High
+        if (!IsAI)
+        {
+            return EEnemyThreatLevel.High;
+        }
+
+        // AI인 경우 BotOwner를 확인
+        BotOwner enemyBotOwner = EnemyPlayerComponent.BotOwner;
+        if (enemyBotOwner == null)
+        {
+            return EEnemyThreatLevel.High;
+        }
+
+        // Scav만 Low threat
+        WildSpawnType role = enemyBotOwner.Profile.Info.Settings.Role;
+        if (EnumValues.WildSpawn.IsScav(role))
+        {
+            return EEnemyThreatLevel.Low;
+        }
+
+        // 나머지는 모두 High (PMC, Boss, Raider, Follower 등)
+        return EEnemyThreatLevel.High;
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using EFT;
 using SAIN.Components;
@@ -29,7 +29,7 @@ public static class DebugOverlay
                 if (enemy != null)
                 {
                     stringBuilder.AppendLine(
-                        $"Goal Enemy: [{enemy.EnemyName}] Distance: [{enemy.RealDistance.Round100()}] IsVisible: [{enemy.IsVisible}]"
+                        $"Goal Enemy: [{enemy.EnemyName}] Distance: [{enemy.RealDistance.Round100()}] IsVisible: [{enemy.IsVisible}] ThreatLevel: [{enemy.ThreatLevel}]"
                     );
                     stringBuilder.AppendLine(
                         $"VisiblePathPoint: [{enemy.VisiblePathPoint}] Dist2Bot: [{enemy.VisiblePathPointDistanceToBot}] DistToLN: [{enemy.VisiblePathPointDistanceToEnemyLastKnown}]"

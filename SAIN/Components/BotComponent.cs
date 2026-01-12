@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EFT;
@@ -415,6 +415,10 @@ public class BotComponent : BotComponentBase, ISPlayer
             Logger.LogError($"Error When Finishing Bot Initialization, Disposing... : {ex}");
             return false;
         }
+
+        // 디버그 오버레이에 봇 등록
+        GameWorldComponent.Instance?.BotDebug?.RegisterBot(this);
+
         return true;
     }
 

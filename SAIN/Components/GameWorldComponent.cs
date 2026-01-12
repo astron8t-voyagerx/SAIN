@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,6 +111,7 @@ public class GameWorldComponent : MonoBehaviour
     public PlayerSpawnTracker PlayerTracker { get; private set; }
     public BotManagerComponent SAINBotController { get; private set; }
     public Extract.ExtractFinderComponent ExtractFinder { get; private set; }
+    public BotDebugComponent BotDebug { get; private set; }
     public DoorHandler Doors { get; private set; }
     public LocationClass Location { get; private set; }
     public SpawnPointMarker[] SpawnPointMarkers { get; private set; }
@@ -297,6 +298,7 @@ public class GameWorldComponent : MonoBehaviour
         Doors = new DoorHandler(this);
         Location = new LocationClass(this);
         ExtractFinder = this.GetOrAddComponent<Extract.ExtractFinderComponent>();
+        BotDebug = this.GetOrAddComponent<BotDebugComponent>();
         JobManager = new JobManager(this);
         GameWorld.OnDispose += DestroyComponent;
 

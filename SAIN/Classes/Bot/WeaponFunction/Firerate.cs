@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SAIN.Plugin;
 using SAIN.Preset;
+using SAIN.SAINComponent.Classes.EnemyClasses;
 using SAIN.SAINComponent.Classes.Info;
 using UnityEngine;
 using static EFT.InventoryLogic.Weapon;
@@ -12,6 +13,11 @@ public class Firerate(BotWeaponInfoClass weaponInfoClass)
 {
     private readonly BotWeaponInfoClass WeaponInfo = weaponInfoClass;
 
+    /// <summary>
+    /// Low Threat 적(Scav) 상대 시 최소 사격 간격 (초) - 한 발씩 신중하게
+    /// </summary>
+    private const float LOW_THREAT_MIN_FIRE_INTERVAL = 0.5f;
+
     public float CalcFirerateInterval()
     {
         float targetDistance = WeaponInfo.Bot.DistanceToAimTarget;
@@ -19,7 +25,16 @@ public class Firerate(BotWeaponInfoClass weaponInfoClass)
         float shootModifier = WeaponInfo.FinalModifier;
         EFireMode firemode = WeaponInfo.CurrentWeapon.FireMode.FireMode;
         float modifier = WeaponInfo.Bot.Info.FileSettings.Shoot.FireratMulti;
-        return SemiAutoROF(targetDistance, firemode, perMeterWait, shootModifier, modifier);
+        float result = SemiAutoROF(targetDistance, firemode, perMeterWait, shootModifier, modifier);
+
+        // Low Threat 적(Scav) 상대 시 사격 간격 증가 - 신중하게 한 발씩
+        Enemy enemy = WeaponInfo.Bot?.GoalEnemy;
+        if (enemy != null && enemy.ThreatLevel == EEnemyThreatLevel.Low)
+        {
+            result = Mathf.Max(result, LOW_THREAT_MIN_FIRE_INTERVAL);
+        }
+
+        return result;
     }
 
     static Firerate()

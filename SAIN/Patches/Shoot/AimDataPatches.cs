@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 using EFT;
 using EFT.InventoryLogic;
@@ -271,7 +271,7 @@ public class AimTimePatch : ModulePatch
         timeToAimResult = CalcADSModifier(botOwner.WeaponManager?.ShootController?.IsAiming == true, timeToAimResult, stringBuilder);
         timeToAimResult = CalcFasterCQB(distance, timeToAimResult, sainAimSettings, stringBuilder);
         timeToAimResult = CalcAttachmentMod(botComponent, timeToAimResult, stringBuilder);
-        timeToAimResult = ClampAimTime(timeToAimResult, fileSettings, stringBuilder);
+        timeToAimResult = ClampAimTime(timeToAimResult, fileSettings, botComponent, stringBuilder);
 
         if (stringBuilder != null && botOwner?.Memory?.GoalEnemy?.Person?.IsYourPlayer == true)
         {
@@ -348,10 +348,24 @@ public class AimTimePatch : ModulePatch
         return timeToAimResult;
     }
 
-    private static float ClampAimTime(float timeToAimResult, BotSettingsComponents fileSettings, StringBuilder stringBuilder)
+    /// <summary>
+    /// Low Threat 적(Scav)에게는 더 신중하게 조준하도록 MAX_AIM_TIME 증가
+    /// </summary>
+    private const float LOW_THREAT_MAX_AIM_TIME = 4f;
+
+    private static float ClampAimTime(float timeToAimResult, BotSettingsComponents fileSettings, BotComponent botComponent, StringBuilder stringBuilder)
     {
         float minAimTime = SAINPlugin.LoadedPreset.GlobalSettings.Aiming.MinAimTime;
         float maxAimTime = fileSettings.Aiming.MAX_AIM_TIME;
+
+        // Low Threat 적(Scav)을 상대할 때는 MAX_AIM_TIME을 증가시켜 더 신중하게 조준
+        Enemy enemy = botComponent?.GoalEnemy;
+        if (enemy != null && enemy.ThreatLevel == EEnemyThreatLevel.Low)
+        {
+            maxAimTime = Mathf.Max(maxAimTime, LOW_THREAT_MAX_AIM_TIME);
+            stringBuilder?.AppendLine($"Low Threat Enemy (Scav): MAX_AIM_TIME increased to [{maxAimTime}]");
+        }
+
         float clampedResult = Mathf.Clamp(timeToAimResult, minAimTime, maxAimTime);
         if (clampedResult != timeToAimResult)
         {
@@ -466,22 +480,34 @@ internal class ForceNoHeadAimPatch : ModulePatch
     [PatchPrefix]
     public static void PatchPrefix(ref bool withLegs, ref bool canBeHead, EnemyInfo __instance)
     {
-        if (!__instance.Person.IsAI)
+        withLegs = true;
+
+        // SAIN bot을 가져옴
+        if (!SAINEnableClass.GetSAIN(__instance.Owner.ProfileId, out BotComponent bot))
         {
-            if (SAINEnableClass.GetSAIN(__instance.Owner.ProfileId, out BotComponent bot))
-            {
-                var aim = bot.Info.FileSettings.Aiming;
-                canBeHead = EFTMath.RandomBool(aim.AimForHeadChance) && aim.AimForHead;
-                withLegs = true;
-                return;
-            }
-            canBeHead = false;
-            withLegs = true;
+            canBeHead = __instance.Person.IsAI;
+            return;
         }
-        else
+
+        // SAIN Enemy 객체 가져오기
+        Enemy enemy = bot.EnemyController.GetEnemy(__instance.ProfileId, false);
+
+        // Low Threat 적(Scav)에게는 무조건 헤드샷
+        if (enemy != null && enemy.ThreatLevel == EEnemyThreatLevel.Low)
         {
             canBeHead = true;
-            withLegs = true;
+            return;
         }
+
+        // 플레이어(Human)에게는 설정에 따라 헤드샷 확률 적용
+        if (!__instance.Person.IsAI)
+        {
+            var aim = bot.Info.FileSettings.Aiming;
+            canBeHead = EFTMath.RandomBool(aim.AimForHeadChance) && aim.AimForHead;
+            return;
+        }
+
+        // 나머지 AI(High Threat: PMC, Boss 등)에게도 헤드샷 가능
+        canBeHead = true;
     }
 }

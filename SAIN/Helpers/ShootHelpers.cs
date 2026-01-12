@@ -1,12 +1,25 @@
-﻿using SAIN.Components;
+using SAIN.Components;
+using SAIN.SAINComponent.Classes.EnemyClasses;
 using UnityEngine;
 
 namespace SAIN.Helpers;
 
 public class Shoot
 {
+    /// <summary>
+    /// Low Threat 적(Scav) 상대 시 버스트 길이 - 사실상 한 발만 쏘도록
+    /// </summary>
+    private const float LOW_THREAT_BURST_LENGTH = 0.01f;
+
     public static float FullAutoBurstLength(BotComponent bot, float distance)
     {
+        // Low Threat 적(Scav) 상대 시 버스트 없이 한 발만
+        Enemy enemy = bot?.GoalEnemy;
+        if (enemy != null && enemy.ThreatLevel == EEnemyThreatLevel.Low)
+        {
+            return LOW_THREAT_BURST_LENGTH;
+        }
+
         if (bot.IsCheater)
         {
             return 1f;

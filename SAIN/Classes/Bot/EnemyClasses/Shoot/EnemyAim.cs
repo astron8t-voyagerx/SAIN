@@ -1,4 +1,4 @@
-﻿using SAIN.Preset.GlobalSettings;
+using SAIN.Preset.GlobalSettings;
 using UnityEngine;
 
 namespace SAIN.SAINComponent.Classes.EnemyClasses;
@@ -11,6 +11,11 @@ public class EnemyAim : EnemyBase
     private const float CALC_SCATTER_FREQ = 0.025f;
     private const float CALC_SCATTER_FREQ_AI = 0.1f;
 
+    /// <summary>
+    /// Low Threat 적(Scav) 상대 시 Scatter 감소 배율 (4배 = Scatter 1/4로 줄임, 매우 정확)
+    /// </summary>
+    private const float LOW_THREAT_SCATTER_REDUCTION = 4f;
+
     public EnemyAim(EnemyData enemyData)
         : base(enemyData, enemyData.Enemy.Bot) { }
 
@@ -22,6 +27,12 @@ public class EnemyAim : EnemyBase
             {
                 _getModTime = Time.time + (Enemy.IsAI ? CALC_SCATTER_FREQ_AI : CALC_SCATTER_FREQ);
                 _modifier = PoseFactor * VisibilityFactor * OpticFactor * InjuryFactor * VelocityFactor;
+
+                // Low Threat 적(Scav) 상대 시 Scatter 반으로 줄임 (더 정확하게 조준)
+                if (Enemy.ThreatLevel == EEnemyThreatLevel.Low)
+                {
+                    _modifier *= LOW_THREAT_SCATTER_REDUCTION;
+                }
             }
             return _modifier;
         }
