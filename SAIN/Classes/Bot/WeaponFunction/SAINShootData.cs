@@ -1,4 +1,4 @@
-﻿using EFT;
+using EFT;
 using EFT.InventoryLogic;
 using SAIN.Components;
 using SAIN.SAINComponent.Classes.EnemyClasses;
@@ -295,14 +295,31 @@ public class SAINShootData : BotComponentClassBase
         return info != null && info.Durability > min && info.Weapon.ChamberAmmoCount > 0;
     }
 
+    /// <summary>
+    /// Low Threat 헤드샷 강제 적용 최대 거리 (이 거리에서 확률 0%)
+    /// </summary>
+    private const float LOW_THREAT_HEADSHOT_MAX_DISTANCE = 50f;
+
     private static Vector3? GetAimTarget(Enemy enemy, BotComponent bot)
     {
         if (enemy != null && enemy.IsVisible && enemy.CanShoot)
         {
-            //Vector3? test = enemy.Shoot.Targets.GetPointToShoot();
-            //if (test == null) {
-            //    Logger.LogWarning($"cant get point to shoot with new system! oh no!");
-            //}
+            // Low Threat 적(Scav)에게는 거리에 따른 확률로 머리 강제 조준
+            // 0m = 100%, 50m = 0% (선형 감소)
+            if (enemy.ThreatLevel == EEnemyThreatLevel.Low)
+            {
+                float distance = enemy.RealDistance;
+                float headshotChance = 1f - Mathf.Clamp01(distance / LOW_THREAT_HEADSHOT_MAX_DISTANCE);
+
+                if (UnityEngine.Random.value < headshotChance)
+                {
+                    var headPart = enemy.EnemyPlayer?.MainParts[BodyPartType.head];
+                    if (headPart != null)
+                    {
+                        return headPart.Position;
+                    }
+                }
+            }
 
             Vector3? centerMass = FindCenterMassPoint(enemy, bot);
             Vector3? partToShoot = GetEnemyPartToShoot(enemy.EnemyInfo);
